@@ -1,32 +1,37 @@
+const catchAsync = require("./../utils/catchAsync");
+const AppError = require("./../utils/appError");
 // Delete Doc
-exports.deleteOne = (Model) => async (req, res, next) => {
+exports.deleteOne = (Model) =>
+  catchAsync(async (req, res, next) => {
     const doc = await Model.findByIdAndDelete(req.params.id);
-    if (!doc) res.status(404).json({ error: "this doc is not existant!" });
+    if (!doc) return next(new AppError("this doc is not existant", 404));
     res.status(204).json({
       status: "success",
       data: null,
     });
-  };
-  
-  // Update Doc
-  
-  exports.updateOne = (Model) => async (req, res, next) => {
+  });
+
+// Update Doc
+
+exports.updateOne = (Model) =>
+  catchAsync(async (req, res, next) => {
     const doc = await Model.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
       runValidators: true,
     });
-    if (!doc) res.status(404).json({ error: "this doc is not existant!" });
+    if (!doc) return next(new AppError("this doc is not existant", 404));
     res.status(200).json({
       status: "success",
       data: {
         data: doc,
       },
     });
-  };
-  
-  // Create Doc
-  
-  exports.createOne = (Model) => async (req, res, next) => {
+  });
+
+// Create Doc
+
+exports.createOne = (Model) =>
+  catchAsync(async (req, res) => {
     const doc = await Model.create(req.body);
     res.status(201).json({
       status: "success",
@@ -34,22 +39,21 @@ exports.deleteOne = (Model) => async (req, res, next) => {
         data: doc,
       },
     });
-  };
-  
-  // get Doc
-  
-  exports.getOne = (Model, popOptions) => async (req, res, next) => {
+  });
+
+// get Doc
+
+exports.getOne = (Model, popOptions) =>
+  catchAsync(async (req, res, next) => {
     let query = Model.findById(req.params.id);
-    if(popOptions) query=query.populate(popOptions);
-    const doc= await query;
-    if (!doc) res.status(404).json({ error: "this doc is not existant!" });
-  
+    if (popOptions) query = query.populate(popOptions);
+    const doc = await query;
+    if (!doc) return next(new AppError("this doc is not existant", 404));
+
     res.status(200).json({
       status: "success",
       data: {
         data: doc,
       },
     });
-  };
-  
-  
+  });
