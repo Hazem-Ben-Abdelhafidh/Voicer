@@ -7,6 +7,7 @@ const cors = require("cors");
 const app = express();
 const rateLimit = require("express-rate-limit");
 const mongoSanitize = require("express-mongo-sanitize");
+const cookieParser= require('cookie-parser');
 const xss = require("xss-clean");
 const userRouter = require("./routes/userRoutes");
 const postRouter = require("./routes/postRoutes");
@@ -41,6 +42,7 @@ app.use(cors(corsOptions));
 app.use(mongoSanitize());
 app.use(xss());
 app.use(hpp());
+app.use(cookieParser());
 
 const limiter = rateLimit({
   max: 100,
@@ -54,17 +56,21 @@ const URL = process.env.DATABASE_URL;
 mongoose
   .connect(URL, {
     useNewUrlParser: true,
-
+    useCreateIndex:true,
     useUnifiedTopology: true,
   })
   .then(() => console.log("connected!"));
 app.listen(port, () => console.log(`App running on port ${port}`));
+
+app.use('/users',userRouter);
 
 app.all("*", (req, res, next) => {
   next(new AppError(`can't find ${req.originalUrl} on this server`, 404));
 });
 
 app.use(globalErrorHandler);
+
+
 
 process.on("unhandledRejection", (err) => {
   console.log(err.name);
