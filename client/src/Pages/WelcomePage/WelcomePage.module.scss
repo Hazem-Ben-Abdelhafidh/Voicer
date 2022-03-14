@@ -8,58 +8,58 @@
     url("./../../Assets/background-1.jpg");
   background-size: cover;
   .hero {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-direction: column;
+    height: 50%;
+    h1 {
+      color: #b233e9;
+      font-size: 6rem;
+      font-family: "Pacifico", cursive;
+    }
+    .hero1 {
+      font-family: "Lato", sans-serif;
       display: flex;
       align-items: center;
-      justify-content: space-around;
+      justify-content: center;
       flex-direction: column;
-      height: 70%;
-    h1 {
-        color: #b233e9;
-        font-size: 6rem;
+      height: 5rem;
+      padding: 1rem 1.5rem;
+      h2 {
+        font-size: 4rem;
+        color: white;
       }
-      .hero1 {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-direction: column;
+      .buttons {
+        width: 50%;
+        padding: 1rem;
         height: 5rem;
-        padding: 1rem 1.5rem;
-        h2 {
-          font-size: 4rem;
+
+        .button {
+          text-decoration: none;
+          border-radius: 5rem;
           color: white;
+          font-size: 1.5rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          padding: 1rem;
+          transition: background-color 0.3s ease-in;
+          margin: 1rem 1rem 0 0;
+          display: inline-block;
+          width: 10rem;
+          text-align: center;
+
+          &:hover {
+            background-color: #9312ca;
+          }
         }
-        .buttons {
-            width: 50%;
-            padding: 1rem;
-            height: 5rem;
-    
-          .button {
-            text-decoration: none;
-            border-radius: 5rem;
-            color: white;
-            font-size: 1.5rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            padding: 1rem;
-            transition: background-color 0.3s ease-in;
-            margin: 1rem;
-            display: inline-block;
-            width: 10rem;
-            text-align: center;
-            
-            &:hover {
-              background-color: #9312ca;
-            }
-          }
-          .loginButton {
-            background-color: #b233e9;
-           
-          }
-          .registerButton {
-            border: 1px solid #9312ca;
-          }
+        .loginButton {
+          background-color: #b233e9;
+        }
+        .registerButton {
+          border: 2px solid #9312ca;
         }
       }
+    }
   }
-  
 }

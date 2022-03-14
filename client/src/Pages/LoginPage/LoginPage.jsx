@@ -1,19 +1,30 @@
+import { useState } from "react";
 import Input from "../../Components/Form/Input/Input";
 import SubmitButton from "../../Components/Form/SubmitButton/SubmitButton";
 import classes from "./LoginPage.module.scss";
 const LoginPage = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const handleLogin = (e) => {
+    e.preventDefault();
+    console.log(email);
+    console.log(password);
+  };
   return (
     <main className={classes.Page}>
-      <form className={classes.Login}>
+      <form className={classes.Login} onSubmit={handleLogin}>
         <h1>Login</h1>
-        <Input type="email" name="email" />
-        <Input type="password" name="password"/>
+        <Input type="email" name="email" value={email} onChange={setEmail} />
+        <Input
+          type="password"
+          name="password"
+          value={password}
+          onChange={setPassword}
+        />
         <a href="#">don't have an account? click here to register</a>
-        <SubmitButton buttonLabel="Login"/>
-
+        <SubmitButton buttonLabel="Login" />
       </form>
     </main>
   );
 };
-
 export default LoginPage;
