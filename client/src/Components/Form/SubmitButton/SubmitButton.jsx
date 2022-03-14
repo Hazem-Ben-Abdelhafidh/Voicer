@@ -1,7 +1,8 @@
+import Spinner from '../../Spinner/Spinner';
 import classes from './SubmitButton.module.scss';
-const SubmitButton = ({buttonLabel}) => {
+const SubmitButton = ({buttonLabel,isFetching}) => {
     return ( 
-        <button className={classes.Button} type="submit">{buttonLabel}</button>
+        <button className={classes.Button} type="submit">{isFetching? <Spinner/>:buttonLabel}</button>
      );
 }
  

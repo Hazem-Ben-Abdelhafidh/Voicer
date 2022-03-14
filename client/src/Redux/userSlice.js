@@ -1,23 +1,38 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import axios from "../api/axios";
 
+export const login = createAsyncThunk("users/login", async (user, thunkAPI) => {
+  try {
+    const res = await axios.post("/users/login", user, {
+      withCredentials: true,
+    });
+    if (res.status === 201) {
+      localStorage.setItem("userName", user.name);
+      console.log(res);
+      return res.data.data.user;
+    } else {
+      return thunkAPI.rejectWithValue(res.status);
+    }
+  } catch (e) {
+    return thunkAPI.rejectWithValue(e);
+  }
+});
 
 export const signup = createAsyncThunk(
   "users/signup",
   async (user, thunkAPI) => {
     try {
-      const res = await axios.post("http://localhost:5000/users/signup", user, {
+      const res = await axios.post("/users/signup", user, {
         withCredentials: true,
       });
-      console.log(res);
       if (res.status === 201) {
         localStorage.setItem("userName", user.name);
+        console.log(res);
         return res.data.data.user;
       } else {
         return thunkAPI.rejectWithValue(res.status);
       }
     } catch (e) {
-      console.log('le success le zebi!');
       return thunkAPI.rejectWithValue(e);
     }
   }
@@ -25,8 +40,10 @@ export const signup = createAsyncThunk(
 export const userSlice = createSlice({
   name: "user",
   initialState: {
-    username:localStorage.getItem("userName")? localStorage.getItem("userName"): '',
-    email:'',
+    username: localStorage.getItem("userName")
+      ? localStorage.getItem("userName")
+      : "",
+    email: "",
     isFetching: false,
     isSuccess: false,
     isError: false,
@@ -39,22 +56,32 @@ export const userSlice = createSlice({
     },
   },
   extraReducers: {
-    [signup.fulfilled]: (state, { payload }) => {
+    [login.fulfilled]: (state, { payload }) => {
       state.isFetching = false;
       state.isSuccess = true;
       state.email = payload.email;
       state.username = localStorage.getItem("userName");
     },
-    [signup.pending]: (state) => {
+    [login.pending]: (state) => {
       state.isFetching = true;
-     
-      
     },
-    [signup.rejected]: (state,{payload}) => {
-     
+    [login.rejected]: (state, { payload }) => {
       state.isFetching = false;
       state.isError = true;
-    }
+    },
+  },
+  [signup.fulfilled]: (state, { payload }) => {
+    state.isFetching = false;
+    state.isSuccess = true;
+    state.email = payload.email;
+    state.username = localStorage.getItem("userName");
+  },
+  [signup.pending]: (state) => {
+    state.isFetching = true;
+  },
+  [signup.rejected]: (state, { payload }) => {
+    state.isFetching = false;
+    state.isError = true;
   },
 });
 

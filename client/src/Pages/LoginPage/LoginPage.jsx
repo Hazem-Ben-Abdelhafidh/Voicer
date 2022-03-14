@@ -2,13 +2,19 @@ import { useState } from "react";
 import Input from "../../Components/Form/Input/Input";
 import SubmitButton from "../../Components/Form/SubmitButton/SubmitButton";
 import classes from "./LoginPage.module.scss";
+import { useSelector, useDispatch } from "react-redux";
+import { login, userSelector } from "./../../Redux/userSlice";
+
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const dispatch = useDispatch();
+  const { isFetching, isSuccess, isError, errorMessage } =
+    useSelector(userSelector);
   const handleLogin = (e) => {
     e.preventDefault();
-    console.log(email);
-    console.log(password);
+    const user = { email, password };
+    dispatch(login(user));
   };
   return (
     <main className={classes.Page}>
@@ -22,7 +28,7 @@ const LoginPage = () => {
           onChange={setPassword}
         />
         <a href="#">don't have an account? click here to register</a>
-        <SubmitButton buttonLabel="Login" />
+        <SubmitButton isFetching={isFetching} buttonLabel="Login" />
       </form>
     </main>
   );
