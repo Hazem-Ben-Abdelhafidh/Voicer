@@ -8,7 +8,7 @@ exports.signup = catchAsync(async (req, res) => {
     name: req.body.name,
     email: req.body.email,
     password: req.body.password,
-    // passwordConfirm: req.body.passwordConfirm,
+    passwordConfirm: req.body.passwordConfirm,
   });
   const accessToken = jwt.sign({ id: newUser.id }, process.env.ACCESS_TOKEN, {
     expiresIn: "10s",
