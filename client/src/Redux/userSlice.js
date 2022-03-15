@@ -6,15 +6,19 @@ export const login = createAsyncThunk("users/login", async (user, thunkAPI) => {
     const res = await axios.post("/users/login", user, {
       withCredentials: true,
     });
-    if (res.status === 201) {
-      localStorage.setItem("username", res.data.data.user.name);
-      console.log(res.data.data.user);
-      return res.data;
+    console.log(res.data);
+    if (res.status === 200) {
+      localStorage.setItem("username", res.data.data.user?.name);
+      return res.data.data;
     } else {
       return thunkAPI.rejectWithValue(res.status);
+
     }
   } catch (e) {
+    console.log('hazem error2')
     return thunkAPI.rejectWithValue(e);
+    
+
   }
 });
 
@@ -41,10 +45,7 @@ export const signup = createAsyncThunk(
 export const userSlice = createSlice({
   name: "user",
   initialState: {
-    username: localStorage.getItem("username")
-      ? localStorage.getItem("username")
-      : "",
-    email: "",
+    user:{},
     accessToken:"",
     isFetching: false,
     isSuccess: false,
@@ -53,7 +54,7 @@ export const userSlice = createSlice({
   },
   reducers: {
     logout: (state) => {
-      state.name = "";
+      state.user = null;
       localStorage.deleteName("username");
     },
   },
@@ -61,9 +62,8 @@ export const userSlice = createSlice({
     [login.fulfilled]: (state, { payload }) => {
       state.isFetching = false;
       state.isSuccess = true;
-      state.email = payload.data.user.email;
+      state.user = payload.user;
       state.accessToken=payload.accessToken;
-      state.username = localStorage.getItem("username");
     },
     [login.pending]: (state) => {
       state.isFetching = true;
@@ -76,9 +76,8 @@ export const userSlice = createSlice({
   [signup.fulfilled]: (state, { payload }) => {
     state.isFetching = false;
     state.isSuccess = true;
-    state.email = payload.data.newUser.email;
+    state.email = payload.newUser;
     state.accessToken= payload.accessToken;
-    state.username = localStorage.getItem("username");
   },
   [signup.pending]: (state) => {
     state.isFetching = true;
