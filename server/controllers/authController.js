@@ -21,12 +21,13 @@ exports.signup = catchAsync(async (req, res) => {
   res.cookie("jwt", refreshToken, {
     httpOnly: true,
     sameSite: "None",
+    secure:true,
     expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
   });
   newUser.password = undefined;
   res.status(201).json({
     status: "success",
-    token: accessToken,
+    accessToken,
     data: {
       newUser,
     },
@@ -54,6 +55,7 @@ exports.login = catchAsync(async (req, res, next) => {
   res.cookie("jwt", refreshToken, {
     httpOnly: true,
     sameSite: "None",
+    secure:true,
     expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
   });
   res.status(200).json({

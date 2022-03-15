@@ -7,9 +7,9 @@ export const login = createAsyncThunk("users/login", async (user, thunkAPI) => {
       withCredentials: true,
     });
     if (res.status === 201) {
-      localStorage.setItem("userName", user.name);
-      console.log(res);
-      return res.data.data.user;
+      localStorage.setItem("username", res.data.data.user.name);
+      console.log(res.data.data.user);
+      return res.data;
     } else {
       return thunkAPI.rejectWithValue(res.status);
     }
@@ -26,9 +26,8 @@ export const signup = createAsyncThunk(
         withCredentials: true,
       });
       if (res.status === 201) {
-        localStorage.setItem("userName", user.name);
-        console.log(res);
-        return res.data.data.user;
+        localStorage.setItem("username", user.name);
+        return res.data;
       } else {
         return thunkAPI.rejectWithValue(res.status);
       }
@@ -37,13 +36,16 @@ export const signup = createAsyncThunk(
     }
   }
 );
+
+
 export const userSlice = createSlice({
   name: "user",
   initialState: {
-    username: localStorage.getItem("userName")
-      ? localStorage.getItem("userName")
+    username: localStorage.getItem("username")
+      ? localStorage.getItem("username")
       : "",
     email: "",
+    accessToken:"",
     isFetching: false,
     isSuccess: false,
     isError: false,
@@ -52,15 +54,16 @@ export const userSlice = createSlice({
   reducers: {
     logout: (state) => {
       state.name = "";
-      localStorage.deleteName("userName");
+      localStorage.deleteName("username");
     },
   },
   extraReducers: {
     [login.fulfilled]: (state, { payload }) => {
       state.isFetching = false;
       state.isSuccess = true;
-      state.email = payload.email;
-      state.username = localStorage.getItem("userName");
+      state.email = payload.data.user.email;
+      state.accessToken=payload.accessToken;
+      state.username = localStorage.getItem("username");
     },
     [login.pending]: (state) => {
       state.isFetching = true;
@@ -73,8 +76,9 @@ export const userSlice = createSlice({
   [signup.fulfilled]: (state, { payload }) => {
     state.isFetching = false;
     state.isSuccess = true;
-    state.email = payload.email;
-    state.username = localStorage.getItem("userName");
+    state.email = payload.data.newUser.email;
+    state.accessToken= payload.accessToken;
+    state.username = localStorage.getItem("username");
   },
   [signup.pending]: (state) => {
     state.isFetching = true;
