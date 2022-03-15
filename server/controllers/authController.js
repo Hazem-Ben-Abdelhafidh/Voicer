@@ -18,11 +18,11 @@ exports.signup = catchAsync(async (req, res) => {
   });
   newUser.refreshToken = refreshToken;
   await newUser.save();
-  newUser.refreshToken=undefined;
+  newUser.refreshToken = undefined;
   res.cookie("jwt", refreshToken, {
     httpOnly: true,
     sameSite: "None",
-    secure:true,
+    secure: true,
     expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
   });
   newUser.password = undefined;
@@ -53,16 +53,17 @@ exports.login = catchAsync(async (req, res, next) => {
   );
   user.refreshToken = refreshToken;
   await user.save();
-  user.refreshToken= undefined;
+  user.refreshToken = undefined;
   res.cookie("jwt", refreshToken, {
     httpOnly: true,
     sameSite: "None",
-    secure:true,
+    secure: true,
     expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
   });
   res.status(200).json({
     status: "success",
     accessToken,
+    data: { user },
   });
 });
 
