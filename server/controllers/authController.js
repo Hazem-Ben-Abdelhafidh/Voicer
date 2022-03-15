@@ -18,6 +18,7 @@ exports.signup = catchAsync(async (req, res) => {
   });
   newUser.refreshToken = refreshToken;
   await newUser.save();
+  newUser.refreshToken=undefined;
   res.cookie("jwt", refreshToken, {
     httpOnly: true,
     sameSite: "None",
@@ -52,6 +53,7 @@ exports.login = catchAsync(async (req, res, next) => {
   );
   user.refreshToken = refreshToken;
   await user.save();
+  user.refreshToken= undefined;
   res.cookie("jwt", refreshToken, {
     httpOnly: true,
     sameSite: "None",
