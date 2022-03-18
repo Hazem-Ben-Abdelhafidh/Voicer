@@ -5,17 +5,19 @@ import classes from "./LoginPage.module.scss";
 import { useSelector, useDispatch } from "react-redux";
 import { login, userSelector } from "./../../Redux/userSlice";
 
+
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
-  const { isFetching, isSuccess, isError, errorMessage } =
+  const {isFetching} =
     useSelector(userSelector);
   const handleLogin = (e) => {
     e.preventDefault();
     const user = { email, password };
     dispatch(login(user));
   };
+
   return (
     <main className={classes.Page}>
       <form className={classes.Login} onSubmit={handleLogin}>

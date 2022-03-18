@@ -1,6 +1,9 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "../api/axios";
 
+
+// <-------Login ------->
+
 export const login = createAsyncThunk("users/login", async (user, thunkAPI) => {
   try {
     const res = await axios.post("/users/login", user, {
@@ -9,7 +12,7 @@ export const login = createAsyncThunk("users/login", async (user, thunkAPI) => {
     console.log(res.data);
     if (res.status === 200) {
       localStorage.setItem("username", res.data.data.user?.name);
-      return res.data.data;
+      return res?.data?.data;
     } else {
       return thunkAPI.rejectWithValue(res.status);
 
@@ -22,6 +25,9 @@ export const login = createAsyncThunk("users/login", async (user, thunkAPI) => {
   }
 });
 
+
+// <-------Signup ------->
+
 export const signup = createAsyncThunk(
   "users/signup",
   async (user, thunkAPI) => {
@@ -29,6 +35,7 @@ export const signup = createAsyncThunk(
       const res = await axios.post("/users/signup", user, {
         withCredentials: true,
       });
+      console.log(res);
       if (res.status === 201) {
         localStorage.setItem("username", user.name);
         return res.data;
@@ -41,6 +48,7 @@ export const signup = createAsyncThunk(
   }
 );
 
+// <---------State---------->
 
 export const userSlice = createSlice({
   name: "user",
@@ -57,6 +65,9 @@ export const userSlice = createSlice({
       state.user = null;
       localStorage.deleteName("username");
     },
+    getNewToken:(state, action)=>{
+      state.accessToken= action.payload;
+    }
   },
   extraReducers: {
     [login.fulfilled]: (state, { payload }) => {
@@ -87,5 +98,5 @@ export const userSlice = createSlice({
     state.isError = true;
   },
 });
-
+export const{getNewToken}= userSlice.actions;
 export const userSelector = (state) => state.user;

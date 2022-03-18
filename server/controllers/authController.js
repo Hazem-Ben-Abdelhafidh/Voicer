@@ -8,7 +8,7 @@ exports.signup = catchAsync(async (req, res) => {
     name: req.body.name,
     email: req.body.email,
     password: req.body.password,
-    passwordConfirm: req.body.passwordConfirm,
+    // passwordConfirm: req.body.passwordConfirm,
   });
   const accessToken = jwt.sign({ id: newUser.id }, process.env.ACCESS_TOKEN, {
     expiresIn: "10s",
@@ -22,6 +22,7 @@ exports.signup = catchAsync(async (req, res) => {
   res.cookie("jwt", refreshToken, {
     httpOnly: true,
     sameSite: "None",
+    secure:true,
     expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
   });
   newUser.password = undefined;
@@ -56,6 +57,7 @@ exports.login = catchAsync(async (req, res, next) => {
   res.cookie("jwt", refreshToken, {
     httpOnly: true,
     sameSite: "None",
+    secure:true,
     expires: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000),
   });
   res.status(200).json({
