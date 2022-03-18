@@ -20,16 +20,10 @@ process.on("uncaughtException", (err) => {
   console.log("shutting down...");
   process.exit(1);
 });
+
 const AppError = require("./utils/appError");
 const hpp = require("hpp");
-app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "http://localhost:3000"); // update to match the domain you will make the request from
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
-  next();
-});
+
 
 const port = 5000;
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
@@ -38,11 +32,12 @@ const corsOptions = {
   origin: "http://localhost:3000",
   credentials: true,
 };
+
+
 app.use(cors(corsOptions));
 app.use(mongoSanitize());
 app.use(xss());
 app.use(hpp());
-app.use(cookieParser());
 
 const limiter = rateLimit({
   max: 100,
@@ -62,7 +57,9 @@ mongoose
   .then(() => console.log("connected!"));
 app.listen(port, () => console.log(`App running on port ${port}`));
 
+app.use(cookieParser());
 app.use('/users',userRouter);
+
 
 app.all("*", (req, res, next) => {
   next(new AppError(`can't find ${req.originalUrl} on this server`, 404));

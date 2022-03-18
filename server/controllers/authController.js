@@ -22,7 +22,6 @@ exports.signup = catchAsync(async (req, res) => {
   res.cookie("jwt", refreshToken, {
     httpOnly: true,
     sameSite: "None",
-    secure: true,
     expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
   });
   newUser.password = undefined;
@@ -45,7 +44,7 @@ exports.login = catchAsync(async (req, res, next) => {
     expiresIn: "60s",
   });
   const refreshToken = jwt.sign(
-    { name: user.name },
+    { id: user.id },
     process.env.REFRESH_TOKEN,
     {
       expiresIn: "30d",
@@ -57,8 +56,7 @@ exports.login = catchAsync(async (req, res, next) => {
   res.cookie("jwt", refreshToken, {
     httpOnly: true,
     sameSite: "None",
-    secure: true,
-    expires: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
+    expires: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000),
   });
   res.status(200).json({
     status: "success",
@@ -69,13 +67,16 @@ exports.login = catchAsync(async (req, res, next) => {
 
 exports.refreshToken = catchAsync(async (req, res, next) => {
   const cookies = req.cookies;
+  console.log(cookies);
   if (!cookies?.jwt)
     return next(new AppError("you need to connect first", 401));
   const refreshToken = cookies.jwt;
   const foundUser = await User.findOne({ refreshToken }).exec();
+  console.log(foundUser.refreshToken)
   jwt.verify(refreshToken, process.env.REFRESH_TOKEN, (err, decoded) => {
     if (err || foundUser.id !== decoded.id)
       return next(new AppError("who are you?", 403));
+    
     const accessToken = jwt.sign(
       {
         id: decoded.id,
