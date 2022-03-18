@@ -4,6 +4,8 @@ import classes from "./../LoginPage/LoginPage.module.scss";
 import { useSelector, useDispatch } from "react-redux";
 import { signup, userSelector } from "./../../Redux/userSlice";
 import { useState } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+
 const SignupPage = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -12,11 +14,16 @@ const SignupPage = () => {
   const dispatch = useDispatch();
   const { isFetching, isSuccess, isError, errorMessage } =
     useSelector(userSelector);
-  const signupHandler= (e)=>{
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location?.state?.from?.pathname || "/home";
+  const signupHandler = (e) => {
     e.preventDefault();
-    const user={name,email,password,passwordConfirm}
+    const user = { name, email, password, passwordConfirm };
     dispatch(signup(user));
-  }
+    navigate(from, { replace: true });
+
+  };
   return (
     <main className={classes.Page}>
       <form className={classes.Login} onSubmit={signupHandler}>
@@ -36,7 +43,7 @@ const SignupPage = () => {
           onChange={setPasswordConfirm}
         />
 
-        <a href="#">Have an account? Connect Now!</a>
+        <Link to="/login">Have an account? Connect Now!</Link>
         <SubmitButton isFetching={isFetching} buttonLabel="Signup" />
       </form>
     </main>

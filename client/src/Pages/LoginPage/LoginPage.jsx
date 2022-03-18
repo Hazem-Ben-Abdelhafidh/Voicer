@@ -4,18 +4,21 @@ import SubmitButton from "../../Components/Form/SubmitButton/SubmitButton";
 import classes from "./LoginPage.module.scss";
 import { useSelector, useDispatch } from "react-redux";
 import { login, userSelector } from "./../../Redux/userSlice";
-
+import { Link, useNavigate, useLocation } from "react-router-dom";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
-  const {isFetching} =
-    useSelector(userSelector);
+  const { isFetching } = useSelector(userSelector);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location?.state?.from?.pathname || "/home";
   const handleLogin = (e) => {
     e.preventDefault();
     const user = { email, password };
     dispatch(login(user));
+    navigate(from, { replace: true });
   };
 
   return (
@@ -29,7 +32,9 @@ const LoginPage = () => {
           value={password}
           onChange={setPassword}
         />
-        <a href="#">don't have an account? click here to register</a>
+        <Link to="/signup">
+          don't have an account? click here to register
+        </Link>
         <SubmitButton isFetching={isFetching} buttonLabel="Login" />
       </form>
     </main>
