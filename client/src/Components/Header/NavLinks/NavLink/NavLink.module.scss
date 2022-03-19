@@ -1,0 +1,15 @@
+.Link {
+    padding: .3rem;
+    margin-right: .3rem;
+    a{
+        text-decoration: none;
+        color: black;
+        font-weight: 600;
+        font-size: 1.5rem;
+        transition: all .2s;
+        font-family: 'Poppins', 'Roboto',sans-serif;
+        &:hover{
+            color:#b233e9;
+        }
+    }
+}

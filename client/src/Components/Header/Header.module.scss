@@ -1,0 +1,8 @@
+.Header {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: .7rem;
+    box-shadow: 0 .05rem .5rem rgb(167, 167, 167);
+    grid-area: header;
+}

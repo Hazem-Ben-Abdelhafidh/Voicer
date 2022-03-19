@@ -1,14 +1,15 @@
+import Header from "../Header/Header";
+import classes from './Layout.module.scss';
+
 const Layout = ({children}) => {
-    const hazem=5;
-    hazem=3;
-    return ( <>
-        <div>Header</div>
+    return ( <div className={classes.Layout}>
+        <Header/>
         <main>
             {children} 
             
         </main>
         <div>Footer</div>
-    </> );
+    </div> );
 }
  
 export default Layout;

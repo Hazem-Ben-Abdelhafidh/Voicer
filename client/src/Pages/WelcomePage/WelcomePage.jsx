@@ -4,7 +4,7 @@ const WelcomePage = () => {
   return (
     <main className={classes.Page}>
       <div className={classes.hero}>
-        <h1>Voicer</h1>
+        <h1>Echoey</h1>
         <div className={classes.hero1}>
           <h2>Speak up! Let your voice be Heard!</h2>
           <div className={classes.buttons}>

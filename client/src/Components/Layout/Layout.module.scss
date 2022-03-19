@@ -1,0 +1,8 @@
+.Layout {
+  display: grid;
+  grid-template-areas:
+    "header header header"
+    "info feed friends"
+    "info feed friends"
+    "footer footer footer";
+}
